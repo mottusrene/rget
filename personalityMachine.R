@@ -1,4 +1,4 @@
-source("helperFunctions.R")
+source("https://github.com/mottusrene/rget/blob/master/helpers.R")
 
 # Allocating the jobs across cores is suggested
 require(future)
@@ -12,8 +12,6 @@ tw2 = 251:500
 
 A = matrix(nrow=2000, ncol=100, rnorm(200000)) 
 A[tw2,] = A[tw1,]  
-# for(i in 1:1000) A[i,] = mean(A[i,])
-# A[,1:50] = A[sample(2000),1:50]
 E = matrix(nrow=2000, ncol=100, rnorm(200000)) 
 
 weights1 = data.frame(genes=rep(1/3, 250), environment=1/3, random=1/3, social=0)
@@ -55,50 +53,11 @@ cor( cbind(
    phen.Stct.others = lt(cor(lastCycle[-c(tw1,tw2),])),
    soc.Stct.twins = lt(cor(Sample2$vsoc[c(tw1,tw2),])),
    soc.Stct.others = lt(cor(Sample2$vsoc[-c(tw1,tw2),]))
-   ))
-  
+))
+
 ## Plot heritability changes over time
 
 plot(apply(Sample1, 2, function(x) mean(diag(cor(x[tw1,], x[tw2,])))), type="l", xlab="Cycles", ylab="Heritability", ylim=c(0,0.6), lty=3)
 lines(apply(Sample2, 2, function(x) mean(diag(cor(x[tw1,], x[tw2,])))), type="l")
 
 
-
-## Change across all cycles
-
-# id = rep(tw1, times=2) ## id variable for twin pairs
-slices = seq(round(0.1*dim(Sample2$results)[2]), round(0.9*dim(Sample2$results)[2]), 10) ## which cycles to take data from
-
-# change1 = change2 = array(dim=c(length(c(tw1,tw2)), ncol(A), length(slices) ))
-# count = 0
-# for(h in slices) {
-#   count = count + 1 
-#   for(i in 1:100) {
-#     change1[,i,count] = residuals(lme4::lmer(Sample1[c(tw1,tw2),dim(Sample1)[2],i] ~ Sample1[c(tw1,tw2),h,][,i] + (1|id)))
-#     change2[,i,count] = residuals(lme4::lmer(Sample2[c(tw1,tw2),dim(Sample2)[2],i] ~ Sample2[c(tw1,tw2),h,][,i] + (1|id)))
-#   }
-# }
-
-change1 = change2 = array(dim=c(length(c(tw1,tw2)), ncol(A), length(slices) ))
-count = 0
-for(h in slices) {
-  count = count + 1 
-    change1[,,count] = Sample1$results[c(tw1,tw2),dim(Sample1$results)[2],] - Sample1$results[c(tw1,tw2),h,] 
-    change2[,,count] = Sample2$results[c(tw1,tw2),dim(Sample2$results)[2],] - Sample2$results[c(tw1,tw2),h,]
-}
-
-aver.cor1 = cor(Sample1$results[tw1,dim(Sample1$results)[2],] + Sample1$results[tw2,dim(Sample1$results)[2],])
-dif.cor1 = cor(Sample1$results[tw1,dim(Sample1$results)[2],] - Sample1$results[tw2,dim(Sample1$results)[2],])
-aver.cor2 = cor(Sample2$results[tw1,dim(Sample2$results)[2],] + Sample2$results[tw2,dim(Sample2$results)[2],])
-dif.cor2 = cor(Sample2$results[tw1,dim(Sample2$results)[2],] - Sample2$results[tw2,dim(Sample2$results)[2],])
-
-plot(apply(change1, 3, function(x) cor(lt(cor(x)), lt(dif.cor1))), xlab="Cycles", ylab="Change - environmental structure overlap", type="l", lty=3, ylim=c(0,1), axes=F)
-axis(2)
-lines(apply(change2, 3, function(x) cor(lt(cor(x)), lt(dif.cor2))), type="l")
-plot(apply(change1, 3, function(x) cor(lt(cor(x)), lt(aver.cor1))), xlab="Cycles", ylab="Change - genetic structure overlap", type = "l", lty=3, ylim=c(0,1), axes = F )
-axis(2)
-lines(apply(change2, 3, function(x) cor(lt(cor(x)), lt(aver.cor2))), type="l")
-
-
-
-#save.image("tmp.RData")

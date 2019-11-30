@@ -3,11 +3,11 @@ require(MASS)
 ## The main function that updates personalities
 
 personalityMachine = function(n, k, cycles, v1, v2, weig, nfriends, conv=0.9, rget=T){  
-  ## setup
+  ## Setup initials
   results = array(dim=c(n,cycles+1,k))
   results[,1,] = rnorm(k*n)
   vsoc = matrix(nrow=n,ncol=k,rnorm(n*k)) 
-  ## loop through cycles and agents and update scores
+  ## Loop through cycles and agents and update trait scores
   for(c in 1:cycles){
     for(p in 1:n){  
       v = cbind(v1[p,], v2[p,], rnorm(k), vsoc[p,]) %*% as.numeric(sqrt(weig[c,]))
