@@ -10,7 +10,12 @@ plan(multisession)
 tw1 = 1:250
 tw2 = 251:500
 
-A = matrix(nrow=2000, ncol=100, rnorm(200000)) 
+## A random genetic structure or a Big Five genetic structure
+# A = matrix(nrow=2000, ncol=100, rnorm(200000))
+A = rnorm(2000) %>% list %>% 
+   rep(5)  %>% map(~facs(., runif(1, .4, .6))) %>% 
+   rep(20) %>% map(~facs(., runif(1, .4, .6))) %>%
+   bind_cols %>% as.matrix
 A[tw2,] = A[tw1,]  
 E = matrix(nrow=2000, ncol=100, rnorm(200000)) 
 
@@ -57,7 +62,7 @@ cor( cbind(
 
 ## Plot heritability changes over time
 
-plot(apply(Sample1, 2, function(x) mean(diag(cor(x[tw1,], x[tw2,])))), type="l", xlab="Cycles", ylab="Heritability", ylim=c(0,0.6), lty=3)
-lines(apply(Sample2, 2, function(x) mean(diag(cor(x[tw1,], x[tw2,])))), type="l")
+plot(apply(Sample1$results, 2, function(x) mean(diag(cor(x[tw1,], x[tw2,])))), type="l", xlab="Cycles", ylab="Heritability", ylim=c(0,0.6), lty=3)
+lines(apply(Sample2$results, 2, function(x) mean(diag(cor(x[tw1,], x[tw2,])))), type="l")
 
 

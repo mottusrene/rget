@@ -1,4 +1,9 @@
 require(MASS)
+require(tidyverse)
+
+## A function to get an intem from a trait (t) with a loading l
+
+facs = function(t, l) t * l + sqrt(1-l^2)*rnorm(length(t))
 
 ## The main function that updates personalities
 
