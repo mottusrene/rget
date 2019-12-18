@@ -13,7 +13,7 @@ personalityMachine = function(n, k, cycles, v1, v2, weig, nfriends, conv=0.9){
   ## Loop through cycles and agents and update trait scores
   for(c in 2:cycles){
     for(p in 1:n){  
-      v = cbind(v1[p,], v2[p,], rnorm(k), vsoc[p,]) %*% as.numeric(sqrt(weig[c,]))
+      v = cbind(v1[p,], v2[p,], rnorm(k), vsoc[p,]) %*% as.numeric(sqrt(weig))
       w = proj.obl(v, v-results[p,c-1,], r=conv)   
       results[p,c,] = w %*% results[p,c-1,]
       vsoc[p,] = rge(results[p,c,], results[-p,c-1,], n = nfriends) 
