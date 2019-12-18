@@ -20,8 +20,8 @@ A = rnorm(2000) %>% list %>%
 A[tw2,] = A[tw1,]  
 E = matrix(nrow=2000, ncol=100, rnorm(200000)) 
 
-w1 = c(genes=1/3, 250, environment=1/3, random=1/3, social=0)
-w2 = c(genes=1/10, 500, environment=1/10, random=1/10, social=7/10)
+w1 = c(genes=1/3, environment=1/3, random=1/3, social=0)
+w2 = c(genes=1/10, environment=1/10, random=1/10, social=7/10)
 
 Sample1 %<-% personalityMachine(n=2000, cycles=150, k=100, v1=A, v2=E, weig=w1, nfriends=5)
 Sample2 %<-% personalityMachine(n=2000, cycles=150, k=100, v1=A, v2=E, weig=w2, nfriends=5)
