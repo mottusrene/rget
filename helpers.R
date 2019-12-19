@@ -6,7 +6,7 @@ item = function(t, l) t * l + sqrt(1-l^2)*rnorm(length(t))
 
 ## The main function that updates personalities
 
-personalityMachine = function(n, k, cycles, v1, v2, weig, nfriends, conv=0.9){  
+personalityMachine = function(n, k, cycles, v1, v2, weig, nfriends, conv=0.9, ntraits = k){  
   ## Setup initials
   results = array(dim=c(n,cycles,k),rnorm(n*cycles*k))
   vsoc = matrix(nrow=n, rnorm(n*k)) 
@@ -16,7 +16,7 @@ personalityMachine = function(n, k, cycles, v1, v2, weig, nfriends, conv=0.9){
       v = cbind(v1[p,], v2[p,], rnorm(k), vsoc[p,]) %*% as.numeric(sqrt(weig))
       w = proj.obl(v, v-results[p,c-1,], r=conv)   
       results[p,c,] = w %*% results[p,c-1,]
-      vsoc[p,] = rge(results[p,c,], results[-p,c-1,], n = nfriends) 
+      vsoc[p,] = rge(results[p,c,], results[-p,c-1,], n = nfriends, top.traits = ntraits) 
     }
   }  
   return(list(results = results, vsoc = vsoc)) 
@@ -36,7 +36,7 @@ proj.obl = function(A, B, r=.9) {
 
 ## Social interactions with n friends and based on the top.traits most salient traits
 
-rge = function(self, others, n, top.traits = length(self)){
+rge = function(self, others, n, top.traits){
   tt = rank(abs(self)) <= top.traits
   influence = order(  apply(others[,tt], 1, function(x) mean((x-self[tt]))^2), decreasing = F)
   closest = t(others[influence,])[,1:n]
