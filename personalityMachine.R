@@ -11,11 +11,11 @@ tw1 = 1:250
 tw2 = 251:500
 
 ## A random genetic structure or a Big Five genetic structure
-# A = matrix(nrow=2000, ncol=100, rnorm(200000))
-A = rnorm(2000) %>% list %>% 
-   rep(5)  %>% map(~facs(., runif(1, .4, .6))) %>% 
-   rep(20) %>% map(~facs(., runif(1, .4, .6))) %>%
-   bind_cols %>% as.matrix
+A = matrix(nrow=2000, ncol=100, rnorm(200000))
+#A = rnorm(2000) %>% list %>% 
+#   rep(5)  %>% map(~facs(., runif(1, .4, .6))) %>% 
+#   rep(20) %>% map(~facs(., runif(1, .4, .6))) %>%
+#   bind_cols %>% as.matrix
 A[tw2,] = A[tw1,]  
 E = matrix(nrow=2000, ncol=100, rnorm(200000)) 
 
