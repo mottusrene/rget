@@ -34,10 +34,11 @@ proj.obl = function(A, B, r=.9) {
   Re((e$vectors) %*% diag(e$values) %*% solve(e$vectors))
 }
 
-## Social interactions with n friends
+## Social interactions with n friends and based on the top.traits most salient traits
 
-rge = function(self, others, n){
-  influence = order(  apply(others, 1, function(x) mean((x-self))^2), decreasing = F)
+rge = function(self, others, n, top.traits = length(self)){
+  tt = rank(abs(self)) <= top.traits
+  influence = order(  apply(others[,tt], 1, function(x) mean((x-self[tt]))^2), decreasing = F)
   closest = t(others[influence,])[,1:n]
   as.numeric(closest %*% rep(1,n)/n)
 }
