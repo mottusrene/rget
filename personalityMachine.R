@@ -61,3 +61,11 @@ cor(tibble(
 Sample1$results %>% apply(2, tw.cor) %>% 
    plot(type="l", xlab="Cycles", ylab="Heritability", ylim=c(0,0.8), lty=3)
 Sample2$results %>% apply(2, tw.cor) %>% lines(type="l")
+
+## Correlations of phenotypic scores with genetic and environmental inputs
+
+cor(A, Sample1$results %>% .[,dim(.)[2],]) %>% diag %>% summary
+cor(E, Sample1$results %>% .[,dim(.)[2],]) %>% diag %>% summary
+cor(A, Sample2$results %>% .[,dim(.)[2],]) %>% diag %>% summary
+cor(E, Sample2$results %>% .[,dim(.)[2],]) %>% diag %>% summary
+
