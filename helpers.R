@@ -38,7 +38,7 @@ proj.obl = function(A, B, r=.9) {
 
 rge = function(self, others, n, top.traits){
   #tt = order(abs(self), decreasing=T) <= top.traits
-  tt  = rank(abs(self))^2 / sum(1:length(self))
+  tt  = rank(abs(self)) / sum(1:length(self))
   influence = order(  apply(others*tt, 1, function(x) mean((x-self*tt))^2), decreasing = F)
   closest = t(others[influence,])[,1:n]
   as.numeric(closest %*% rep(1,n)/n)
